@@ -244,7 +244,7 @@ defer
         const description = document.getElementById("Description").value;
         const photo = document.getElementById("photo")
         const imageURL = URL.createObjectURL(photo.files[0]);
-        const locationmethod = document.querySelector('input[name="locationmethod"]').value;
+        const locationmethod = document.querySelector('input[name="locationmethod"]:check').value;
         let position=null;
         
         if(locationmethod ==="geo"){
@@ -350,7 +350,7 @@ defer
 
     function deleteLanmark(index)
     {
-        const landmark = landmarks[index];
+        const landmark = landmarks[index];winget install --id Git.Git -e --source winget
         landmark.marker.map =null;
 
         landmarks.splice(index,1);
