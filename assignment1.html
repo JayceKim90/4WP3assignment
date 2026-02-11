@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment1</title>
+</head>
+
+<style>
+    html,body{
+        height :100%;
+        margin : 0;
+        overflow-x:hidden;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    .main-flex{
+        display: flex;
+        align-items:stretch;
+        min-height: 100vh;
+        
+    }
+    .mian-flex > * {min-width:0;}
+    #sidebar{
+        width:300px;
+        max-width: 100%;
+        background-color: white;
+        padding:25px;
+        box-shadow: 2px 0px 10px black;
+        overflow-y: auto;
+
+    }
+    
+    input[type="text"], textarea ,input[type="file"]{
+        width: 100%;
+        max-width: 100%;
+    }
+    #map {
+        flex:1 1 auto;
+        min-width: 0;
+        min-height: 100vh;
+        height: 100vh;
+    }
+    .landmark-item{
+        background-color: white;
+        color:black;
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+    .landmark-item.highlight{
+        background-color: green;
+        color:white;
+        transition: background-color 0.5s ease;
+    }
+    
+    @media( max-width: 800px){
+        .main-flex {flex-direction: column;}
+        #sidebar{width:100%;}
+        #map { width:100%; height: 50vh;}
+    }
+
+</style>
+<body>
+<div class = "main-flex">
+    <div id = "sidebar">
+        <lable>Landmark information</lable>
+        <br />
+        <lable for = "address">Address:</lable>
+        <input type = "text" id="address">
+         <br />
+        <label for="Name">Name:</label>
+        <input type = "text" id="Name">
+         <br />
+        <label for="Description">Description:</label>
+        
+        <textarea id="Description"></textarea>
+         <br />
+        <label for="photo">Photo:</label>
+        <input type="file" id="photo" accept="image/*">
+         <br />
+        <label>Location input method:</label>
+        <br>
+        <input type = "radio" name ="locationmethod" id="locationmethodgeo" value ="geo">
+        <label for ="locationmethodgeo">Use my current location (browser geolocation)</label>
+        <input type ="radio" name="locationmethod" id="locationmethodcords" value="coords">
+        <label for="locationmethodcords">Enter Corrdinates manually</label>
+        <button id ="locate">Locate on Map</button>
+        <br/>
+        <div id="coordInputs">
+            <label for="lat">Latitude:</label>
+            <input type="text" id="lat">
+            <br />
+            <label for="lng">Longitude:</label>
+            <input type="text" id="lng">
+            <br />
+        </div>
+
+        <label>Map diplay error Messages:</label>
+        <div id="error_display"> </div>
+
+        <label>data input error Messages:</label>
+        <div id="error_data"> </div>
+
+        <div id = "landmark_list">
+            <h1> Landmark List</h1>
+            <div id = "landmark_items">
+
+            </div>
+        </div>
+
+    </div>
+
+    
+
+
+    <div id="map"></div>
+</div>
+<script
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALj9NJ2A5fwkFgJbfBTJhqZO64KBDSVcA&callback=initMap&v=weekly&libraries=marker"
+defer
+></script>
+<script>
+    
+    let landmarks =[];
+    let infowindows = [];
+    let userCurrentLocation =null
+
+    const defaultLocation = {
+            lat : 43.6532
+            ,lng : -79.3822
+        }
+
+
+
+     function initMap()
+    {   
+
+
+        map = new google.maps.Map(document.getElementById("map"),
+        {
+            center: defaultLocation,
+            zoom: 10,
+            mapId:"f23a3bb7a28da2c38f4fa764"
+        });
+
+
+
+        geocoder = new google.maps.Geocoder();
+
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(showPosition, handleerror);
+
+        }
+        
+
+        function showPosition(position)
+        {
+            const userLocation ={
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            }
+
+            userCurrentLocation=userLocation
+
+            map.setCenter(userLocation);
+            map.setZoom(12);
+        }
+
+        function handleerror(error)
+        {
+            const error_display = document.getElementById("error_display");
+
+             switch(error.code) 
+            {
+                case error.PERMISSION_DENIED:
+                    error_display.innerHTML = "User denied the request for Geolocation."
+                break;
+                case error.POSITION_UNAVAILABLE:
+                    error_display.innerHTML = "Location information is unavailable."
+                break;
+                case error.TIMEOUT:
+                    error_display.innerHTML = "The request to get user location timed out."
+                break;
+                case error.UNKNOWN_ERROR:
+                error_display.innerHTML = "An unknown error occurred."
+                break;
+             }
+        }
+        
+
+
+
+    }
+
+    function ValidateDataType()
+    {
+
+        
+        const address = document.getElementById("address").value;
+        const title = document.getElementById("Name").value;
+        const description = document.getElementById("Description").value;
+        const photo = document.getElementById("photo")
+        const error_data = document.getElementById("error_data");
+        const locationmethod = document.querySelector('input[name="locationmethod"]').value;
+
+
+
+        if (address === "" || title ==="" || description === "" || photo.files.length ===0){
+            error_data.innerHTML = "All data fields are required.";
+            return false;
+        }
+
+        if(locationmethod ==="geo")
+        {
+            if(userCurrentLocation === false)
+        {
+            error_data.innerHTML="Brower location is not available."
+            return false;
+        }
+        }
+        else if(locationmethod ==="coords")
+        {
+            const lat = parseFloat(document.getElementById("lat").value);
+            const lng = parseFloat(document.getElementById("lng").value);
+
+            if(lat===''|| lng==='')
+        {
+            error_data.innerHTML="Latitude and longitude are requried";
+            return false;
+        }
+        }
+
+        error_data.innerHTML="no error";
+        return true
+    }
+
+
+    function geocodeaddress()
+    {
+        const address = document.getElementById("address").value;
+        const title = document.getElementById("Name").value;
+        const description = document.getElementById("Description").value;
+        const photo = document.getElementById("photo")
+        const imageURL = URL.createObjectURL(photo.files[0]);
+        const locationmethod = document.querySelector('input[name="locationmethod"]').value;
+        let position=null;
+        
+        if(locationmethod ==="geo"){
+            position = userCurrentLocation;
+        }
+        else if(locationmethod==="coords")
+        {
+            const lat = parseFloat(document.getElementById("lat").value);
+            const lng = parseFloat(document.getElementById("lng").value); 
+            position = {lat:lat,lng:lng};
+        }
+
+            
+
+        const marker=new google.maps.marker.AdvancedMarkerElement({
+            map:map,
+            position:position,
+        });
+                    
+              
+
+
+        const contentString = 
+            "<h3>" + title + "</h3>" +
+            "<p>" + description + "</p>" +
+            "<img src='" + imageURL + "' width = '150' height = '150'/>";
+            const infowindow = new google.maps.InfoWindow({
+                content: contentString
+                })
+
+                landmarks.push({
+                    title: title,
+                    address: address,
+                    marker: marker,
+                    position: position
+                });
+
+                infowindows.push(infowindow);
+                
+                const landmarkIndex = landmarks.length -1;
+                marker.addListener("click",function(){
+                    highlightlandmark(landmarkIndex);
+                    infowindow.open({
+                        anchor: marker,
+                        shouldFocus: false
+                    })
+                })
+                UpdateLandmarkList();
+
+                document.getElementById("address").value ="";
+                document.getElementById("Name").value ="";
+                document.getElementById("Description").value ="";
+                document.getElementById("photo").value ="";
+                document.getElementById("lat").value="";
+                document.getElementById("lng").value="";
+                document.getElementById("error_data").innerHTML ="";
+                
+
+
+           
+
+       
+
+      
+
+        
+    }
+
+    function UpdateLandmarkList()
+    {
+        const Landmark_items = document.getElementById("landmark_items");
+
+        if (landmarks.length ===0){
+            Landmark_items.innerHTML = "<p>No landmarks added yet.</p>";
+            return;
+        }
+       
+        Landmark_items.innerHTML ="";
+        landmarks.forEach(function(item, index){
+            const LandmarkDiv = document.createElement("div");
+            LandmarkDiv.className = "landmark-item";
+            LandmarkDiv.id = "landmark-" + index;
+
+            LandmarkDiv.innerHTML = "<h3>" + item.title + "</h3>" +
+                                    "<p>" + item.address + "</p>"+
+                                    "<button id ='delete-" + index +"'> Delete </button>";
+            LandmarkDiv.addEventListener("click",function(){
+                    cneterandshowlandmark(index);
+                });
+            const delete_btn =LandmarkDiv.querySelector("#delete-"+ index);
+            delete_btn.addEventListener("click", function(){
+                
+                deleteLanmark(index);
+            });
+           
+            Landmark_items.appendChild(LandmarkDiv);
+            
+            });
+        
+    }
+
+   
+
+    function deleteLanmark(index)
+    {
+        const landmark = landmarks[index];
+        landmark.marker.map =null;
+
+        landmarks.splice(index,1);
+        infowindows.splice(index,1);
+
+        UpdateLandmarkList();
+
+
+    }
+    function cneterandshowlandmark(index)
+    {
+        const landmark = landmarks[index];
+        map.setCenter(landmark.position);
+        map.setZoom(15);
+
+
+    }
+
+    function highlightlandmark(index)
+    {
+
+        const allLandmarks = document.querySelectorAll(".landmark-item");
+        allLandmarks.forEach(function(item){
+            item.classList.remove("highlight");
+        });
+
+
+        const activeLandmark = document.getElementById("landmark-" + index);
+        if (activeLandmark){
+            activeLandmark.classList.add("highlight");
+            
+        }
+        
+
+    }
+   
+
+
+    const locate_location =document.getElementById("locate");
+    locate_location.addEventListener("click", function(){
+        if (ValidateDataType()){
+            geocodeaddress();
+        }
+    } );
+
+ 
+</script>
+
+</body>
+</html>
