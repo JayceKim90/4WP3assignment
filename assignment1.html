@@ -56,7 +56,7 @@
         cursor: pointer;
 
     }
-    
+
     .landmark-item{
         background-color: white;
         color:black;
@@ -112,6 +112,7 @@
         </div>
         <div id="coordInputs" class="location-method-group">
             <span class="location-method-label">Coordinates</span>
+            <br />
             <label for="lat">Latitude:</label>
             <input type="text" id="lat">
             <br />
@@ -325,10 +326,12 @@ defer
                 document.getElementById("address").value ="";
                 document.getElementById("Name").value ="";
                 document.getElementById("Description").value ="";
-                document.getElementById("photo").value ="";
-                documnet.getElementById("lat").value="";
-                documnet.getElementById("lng").value="";
+                document.getElementById("photo").value =""
+                document.querySelectorAll('input[name="locationmethod"]').forEach(function(radio) { radio.checked = false; });
+                document.getElementById("lat").value = "";
+                document.getElementById("lng").value = "";
                 document.getElementById("error_data").innerHTML ="";
+
                 
 
 
