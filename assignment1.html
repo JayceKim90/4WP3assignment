@@ -428,6 +428,18 @@ defer
         }
     } );
 
+    function togglecoorinputs(){
+        const method = document.querySelector('input[name="locationmethod"]:checked')?.value;
+        const coordinputs = document.getElementById("coordInputs");
+        
+        coordinputs.style.display = (method === "coords") ? "": "none";
+    }
+
+     document.querySelectorAll('input[name="locationmethod"]').forEach(function(radio) {
+        radio.addEventListener("change", togglecoorinputs);
+    });
+
+    togglecoorinputs();
  
 </script>
 
