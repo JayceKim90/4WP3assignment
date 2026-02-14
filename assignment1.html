@@ -7,21 +7,61 @@
 </head>
 
 <style>
+
+    #map {
+        flex:1 1 auto;
+        min-width: 0;
+        min-height: 100vh;
+        height: 100vh;
+    }
  
 </style>
-
+<body>
+     <lable>Landmark information</lable>
+        <br />
+        <lable for = "address">Address:</lable>
+        <input type = "text" id="address">
+         <br />
+        <label for="Name">Name:</label>
+        <input type = "text" id="Name">
+         <br />
+        <label for="Description">Description:</label>
+        
+        <textarea id="Description"></textarea>
+         <br />
+        <label for="photo">Photo:</label>
+        <input type="file" id="photo" accept="image/*">
+         <br />
 
     
 
 
     <div id="map"></div>
 </div>
+
 <script
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALj9NJ2A5fwkFgJbfBTJhqZO64KBDSVcA&callback=initMap&v=weekly&libraries=marker"
 defer
 ></script>
 <script>
 
+    const defaultLocation = {
+            lat : 43.6532
+            ,lng : -79.3822
+        }
+
+  function initMap()
+    {   
+
+
+        map = new google.maps.Map(document.getElementById("map"),
+        {
+            center: defaultLocation,
+            zoom: 10,
+            mapId:"f23a3bb7a28da2c38f4fa764"
+        });
+
+    }
  
 </script>
 
