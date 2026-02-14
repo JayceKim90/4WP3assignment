@@ -42,6 +42,11 @@
         margin-bottom: 10px;
         cursor: pointer;
     }
+      .landmark-item.highlight{
+        background-color: green;
+        color:white;
+        transition: background-color 0.5s ease;
+    }
 
 
     #map {
@@ -195,7 +200,7 @@ defer
 
 
 
-     function geocodeaddress()
+    function geocodeaddress()
     {
         const address = document.getElementById("address").value;
         const title = document.getElementById("Name").value;
@@ -233,6 +238,7 @@ defer
                 
                 const landmarkIndex = landmarks.length -1;
                 marker.addListener("click",function(){
+                    highlightlandmark(landmarkIndex);
                     infowindow.open({
                         anchor: marker,
                         shouldFocus: false
@@ -293,6 +299,25 @@ defer
             geocodeaddress();
         }
     } );
+
+
+    function highlightlandmark(index)
+    {
+
+        const allLandmarks = document.querySelectorAll(".landmark-item");
+        allLandmarks.forEach(function(item){
+            item.classList.remove("highlight");
+        });
+
+
+        const activeLandmark = document.getElementById("landmark-" + index);
+        if (activeLandmark){
+            activeLandmark.classList.add("highlight");
+            
+        }
+        
+
+    }
 
 </script>
 
