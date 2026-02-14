@@ -19,7 +19,7 @@
         min-height: 100vh;
         
     }
-    .main-flex > * {min-width:0;}
+    .mian-flex > * {min-width:0;}
     #sidebar{
         width:300px;
         max-width: 100%;
@@ -34,7 +34,13 @@
         width: 100%;
         max-width: 100%;
     }
-      .landmark-item{
+    #map {
+        flex:1 1 auto;
+        min-width: 0;
+        min-height: 100vh;
+        height: 100vh;
+    }
+    .landmark-item{
         background-color: white;
         color:black;
         border: 1px solid black;
@@ -42,22 +48,13 @@
         margin-bottom: 10px;
         cursor: pointer;
     }
-      .landmark-item.highlight{
+    .landmark-item.highlight{
         background-color: green;
         color:white;
         transition: background-color 0.5s ease;
     }
-
-
-    #map {
-        flex:1 1 auto;
-        min-width: 0;
-        min-height: 100vh;
-        height: 100vh;
-    }
     
- 
-     @media( max-width: 800px){
+    @media( max-width: 800px){
         .main-flex {flex-direction: column;}
         #sidebar{width:100%;}
         #map { width:100%; height: 50vh;}
@@ -67,9 +64,9 @@
 <body>
 <div class = "main-flex">
     <div id = "sidebar">
-     <lable>Landmark information</lable>
+        <lable>Landmark information</lable>
         <br />
-        <label for = "address">Address:</label>
+        <lable for = "address">Address:</lable>
         <input type = "text" id="address">
          <br />
         <label for="Name">Name:</label>
@@ -82,30 +79,29 @@
         <label for="photo">Photo:</label>
         <input type="file" id="photo" accept="image/*">
          <br />
-         <button id ="locate">Locate on Map</button>
-          <br/>
+        <button id ="locate">Locate on Map</button>
+        <br/>
 
-          
         <label>Map diplay error Messages:</label>
         <div id="error_display"> </div>
 
         <label>data input error Messages:</label>
         <div id="error_data"> </div>
 
-         <div id = "landmark_list">
+        <div id = "landmark_list">
             <h1> Landmark List</h1>
             <div id = "landmark_items">
 
             </div>
-         </div>
+        </div>
+
     </div>
-    
+
     
 
 
     <div id="map"></div>
 </div>
-
 <script
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALj9NJ2A5fwkFgJbfBTJhqZO64KBDSVcA&callback=initMap&v=weekly&libraries=marker"
 defer
@@ -120,7 +116,9 @@ defer
             ,lng : -79.3822
         }
 
-  function initMap()
+
+
+     function initMap()
     {   
 
 
@@ -131,7 +129,8 @@ defer
             mapId:"f23a3bb7a28da2c38f4fa764"
         });
 
-        
+
+
         geocoder = new google.maps.Geocoder();
 
         if (navigator.geolocation)
@@ -140,6 +139,7 @@ defer
 
         }
         
+
         function showPosition(position)
         {
             const userLocation ={
@@ -147,13 +147,11 @@ defer
                 lng: position.coords.longitude
             }
 
-            userCurrentLocation=userLocation
-
             map.setCenter(userLocation);
             map.setZoom(12);
         }
 
-         function handleerror(error)
+        function handleerror(error)
         {
             const error_display = document.getElementById("error_display");
 
@@ -173,10 +171,13 @@ defer
                 break;
              }
         }
+        
+
+
 
     }
 
-     function ValidateDataType()
+    function ValidateDataType()
     {
 
         
@@ -196,8 +197,6 @@ defer
         }
 
     }
-
-
 
 
     function geocodeaddress()
@@ -283,26 +282,39 @@ defer
             LandmarkDiv.id = "landmark-" + index;
 
             LandmarkDiv.innerHTML = "<h3>" + item.title + "</h3>" +
-                                    "<p>" + item.address + "</p>";
-                                    
+                                    "<p>" + item.address + "</p>"+
+                                    "<button id ='delete-" + index +"'> Delete </button>";
             LandmarkDiv.addEventListener("click",function(){
                     cneterandshowlandmark(index);
                 });
+            const delete_btn =LandmarkDiv.querySelector("#delete-"+ index);
+            delete_btn.addEventListener("click", function(){
+                
+                deleteLanmark(index);
+            });
+           
             Landmark_items.appendChild(LandmarkDiv);
             
             });
         
     }
 
-    
-     const locate_location =document.getElementById("locate");
-    locate_location.addEventListener("click", function(){
-        if (ValidateDataType()){
-            geocodeaddress();
-        }
-    } );
+   
 
-     function cneterandshowlandmark(index)
+    function deleteLanmark(index)
+    {
+        const landmark = landmarks[index];
+
+        landmark.marker.map =null;
+
+        landmarks.splice(index,1);
+        infowindows.splice(index,1);
+
+        UpdateLandmarkList();
+
+
+    }
+    function cneterandshowlandmark(index)
     {
         const landmark = landmarks[index];
         map.setCenter(landmark.position);
@@ -310,7 +322,6 @@ defer
 
 
     }
-
 
     function highlightlandmark(index)
     {
@@ -329,7 +340,17 @@ defer
         
 
     }
+   
 
+
+    const locate_location =document.getElementById("locate");
+    locate_location.addEventListener("click", function(){
+        if (ValidateDataType()){
+            geocodeaddress();
+        }
+    } );
+
+ 
 </script>
 
 </body>
