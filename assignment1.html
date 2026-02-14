@@ -7,6 +7,34 @@
 </head>
 
 <style>
+    html,body{
+        height :100%;
+        margin : 0;
+        overflow-x:hidden;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    .main-flex{
+        display: flex;
+        align-items:stretch;
+        min-height: 100vh;
+        
+    }
+    .mian-flex > * {min-width:0;}
+    #sidebar{
+        width:300px;
+        max-width: 100%;
+        background-color: white;
+        padding:25px;
+        box-shadow: 2px 0px 10px black;
+        overflow-y: auto;
+
+    }
+    
+    input[type="text"], textarea ,input[type="file"]{
+        width: 100%;
+        max-width: 100%;
+    }
+
 
     #map {
         flex:1 1 auto;
@@ -15,8 +43,16 @@
         height: 100vh;
     }
  
+     @media( max-width: 800px){
+        .main-flex {flex-direction: column;}
+        #sidebar{width:100%;}
+        #map { width:100%; height: 50vh;}
+    }
+
 </style>
 <body>
+<div class = "main-flex">
+    <div id = "sidebar">
      <lable>Landmark information</lable>
         <br />
         <lable for = "address">Address:</lable>
@@ -32,7 +68,8 @@
         <label for="photo">Photo:</label>
         <input type="file" id="photo" accept="image/*">
          <br />
-
+    </div>
+    
     
 
 
@@ -82,7 +119,7 @@ defer
             map.setCenter(userLocation);
             map.setZoom(12);
         }
-        
+
          function handleerror(error)
         {
             const error_display = document.getElementById("error_display");
