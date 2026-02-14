@@ -313,14 +313,17 @@ defer
 
                 infowindows.push(infowindow);
                 
-                const landmarkIndex = landmarks.length -1;
+               
                 marker.addListener("click",function(){
-                    highlightlandmark(landmarkIndex);
-                    infowindow.open({
+                    const currentIndex = landmarks.findIndex(function(e) {return e.marker === marker});
+                    if(currentIndex !== -1){
+                    highlightlandmark(currentIndex);
+                    infowindow[currentIndex].open({
                         anchor: marker,
                         shouldFocus: false
-                    })
-                })
+                    });
+                }
+                });
                 UpdateLandmarkList();
 
                 document.getElementById("address").value ="";
