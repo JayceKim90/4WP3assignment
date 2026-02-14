@@ -19,7 +19,7 @@
         min-height: 100vh;
         
     }
-    .mian-flex > * {min-width:0;}
+    .main-flex > * {min-width:0;}
     #sidebar{
         width:300px;
         max-width: 100%;
@@ -55,7 +55,7 @@
     <div id = "sidebar">
      <lable>Landmark information</lable>
         <br />
-        <lable for = "address">Address:</lable>
+        <label for = "address">Address:</label>
         <input type = "text" id="address">
          <br />
         <label for="Name">Name:</label>
@@ -68,6 +68,8 @@
         <label for="photo">Photo:</label>
         <input type="file" id="photo" accept="image/*">
          <br />
+         <button id ="locate">Locate on Map</button>
+          <br/>
     </div>
     
     
@@ -142,7 +144,65 @@ defer
         }
 
     }
- 
+
+
+     function geocodeaddress()
+    {
+        const address = document.getElementById("address").value;
+        const title = document.getElementById("Name").value;
+        const description = document.getElementById("Description").value;
+        const photo = document.getElementById("photo")
+        const imageURL = URL.createObjectURL(photo.files[0]);
+
+        
+         geocoder.geocode( {'address':address}, function(results,status){
+
+            if (status =="OK"){
+
+                    const marker=new google.maps.marker.AdvancedMarkerElement({
+                    map:map,
+                    position:{lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()},
+                    
+                });
+
+
+                const contentString = 
+                    "<h3>" + title + "</h3>" +
+                    "<p>" + description + "</p>" +
+                    "<img src='" + imageURL + "' width = '150' height = '150'/>";
+                const infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                })
+
+           
+                marker.addListener("click",function(){
+                    infowindow.open({
+                        anchor: marker,
+                        shouldFocus: false
+                    })
+                })
+               
+
+                document.getElementById("address").value ="";
+                document.getElementById("Name").value ="";
+                document.getElementById("Description").value ="";
+                document.getElementById("photo").value ="";
+                document.getElementById("error_data").innerHTML ="";
+
+
+
+            }
+            else {
+                document.getElementById("error_display").innerHTML = "Geocode was not successful for the following reason: " + status;
+            }
+        })
+
+    }
+
+    
+    const locate_location =document.getElementById("locate");
+    locate_location.addEventListener("click",geocodeaddress);
+    
 </script>
 
 </body>
