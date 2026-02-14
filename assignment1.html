@@ -34,6 +34,14 @@
         width: 100%;
         max-width: 100%;
     }
+      .landmark-item{
+        background-color: white;
+        color:black;
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
 
 
     #map {
@@ -42,6 +50,7 @@
         min-height: 100vh;
         height: 100vh;
     }
+    
  
      @media( max-width: 800px){
         .main-flex {flex-direction: column;}
@@ -77,6 +86,13 @@
 
         <label>data input error Messages:</label>
         <div id="error_data"> </div>
+
+         <div id = "landmark_list">
+            <h1> Landmark List</h1>
+            <div id = "landmark_items">
+
+            </div>
+         </div>
     </div>
     
     
@@ -90,6 +106,9 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALj9NJ2A5fwkFgJbfBTJhqZO6
 defer
 ></script>
 <script>
+
+    let landmarks =[];
+    let infowindows = [];
 
     const defaultLocation = {
             lat : 43.6532
@@ -183,9 +202,8 @@ defer
         const description = document.getElementById("Description").value;
         const photo = document.getElementById("photo")
         const imageURL = URL.createObjectURL(photo.files[0]);
-
         
-         geocoder.geocode( {'address':address}, function(results,status){
+        geocoder.geocode( {'address':address}, function(results,status){
 
             if (status =="OK"){
 
@@ -204,14 +222,23 @@ defer
                     content: contentString
                 })
 
-           
+                landmarks.push({
+                    title: title,
+                    address: address,
+                    marker:marker,
+                    position: {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()}
+                });
+
+                infowindows.push(infowindow);
+                
+                const landmarkIndex = landmarks.length -1;
                 marker.addListener("click",function(){
                     infowindow.open({
                         anchor: marker,
                         shouldFocus: false
                     })
                 })
-               
+                UpdateLandmarkList();
 
                 document.getElementById("address").value ="";
                 document.getElementById("Name").value ="";
@@ -225,8 +252,38 @@ defer
             else {
                 document.getElementById("error_display").innerHTML = "Geocode was not successful for the following reason: " + status;
             }
-        })
+        });
 
+       
+
+      
+
+        
+    }
+
+    function UpdateLandmarkList()
+    {
+        const Landmark_items = document.getElementById("landmark_items");
+
+        if (landmarks.length ===0){
+            Landmark_items.innerHTML = "<p>No landmarks added yet.</p>";
+            return;
+        }
+       
+        Landmark_items.innerHTML ="";
+        landmarks.forEach(function(item, index){
+            const LandmarkDiv = document.createElement("div");
+            LandmarkDiv.className = "landmark-item";
+            LandmarkDiv.id = "landmark-" + index;
+
+            LandmarkDiv.innerHTML = "<h3>" + item.title + "</h3>" +
+                                    "<p>" + item.address + "</p>";
+                                    
+           
+            Landmark_items.appendChild(LandmarkDiv);
+            
+            });
+        
     }
 
     
