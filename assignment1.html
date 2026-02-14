@@ -61,6 +61,49 @@ defer
             mapId:"f23a3bb7a28da2c38f4fa764"
         });
 
+        
+        geocoder = new google.maps.Geocoder();
+
+        if (navigator.geolocation)
+        {
+            navigator.geolocation.getCurrentPosition(showPosition, handleerror);
+
+        }
+        
+        function showPosition(position)
+        {
+            const userLocation ={
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            }
+
+            userCurrentLocation=userLocation
+
+            map.setCenter(userLocation);
+            map.setZoom(12);
+        }
+        
+         function handleerror(error)
+        {
+            const error_display = document.getElementById("error_display");
+
+             switch(error.code) 
+            {
+                case error.PERMISSION_DENIED:
+                    error_display.innerHTML = "User denied the request for Geolocation."
+                break;
+                case error.POSITION_UNAVAILABLE:
+                    error_display.innerHTML = "Location information is unavailable."
+                break;
+                case error.TIMEOUT:
+                    error_display.innerHTML = "The request to get user location timed out."
+                break;
+                case error.UNKNOWN_ERROR:
+                error_display.innerHTML = "An unknown error occurred."
+                break;
+             }
+        }
+
     }
  
 </script>
