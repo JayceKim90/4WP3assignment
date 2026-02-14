@@ -40,6 +40,23 @@
         min-height: 100vh;
         height: 100vh;
     }
+    .location-method-group{
+        margin: 0.75rem 0;
+        padding: 1rem;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+
+    }
+    .location-method-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+
+    }
+    
     .landmark-item{
         background-color: white;
         color:black;
@@ -53,11 +70,13 @@
         color:white;
         transition: background-color 0.5s ease;
     }
+  
     
     @media( max-width: 800px){
         .main-flex {flex-direction: column;}
         #sidebar{width:100%;}
         #map { width:100%; height: 50vh;}
+         
     }
 
 </style>
@@ -79,17 +98,20 @@
         <label for="photo">Photo:</label>
         <input type="file" id="photo" accept="image/*">
          <br />
-        <label>Location input method:</label>
-        <br>
-        <input type = "radio" name ="locationmethod" id="locationmethodgeo" value ="geo">
-        <label for ="locationmethodgeo">Use my current location <br/> (browser geolocation)</label>
-        <br/>
-
-        <input type ="radio" name="locationmethod" id="locationmethodcords" value="coords">
-        <label for="locationmethodcords">Enter Corrdinates manually</label>
-        <button id ="locate">Locate on Map</button>
-        <br/>
-        <div id="coordInputs">
+        <div class="location-method-group">
+            <span class="location-method-label">Location input method:</span>
+            <div class="location-method-option">
+                <input type="radio" name="locationmethod" id="locationmethodgeo" value="geo">
+                <label for="locationmethodgeo">Use my current location (browser geolocation)</label>
+            </div>
+            <div class="location-method-option">
+                <input type="radio" name="locationmethod" id="locationmethodcords" value="coords">
+                <label for="locationmethodcords">Enter coordinates manually</label>
+                
+            </div>
+        </div>
+        <div id="coordInputs" class="location-method-group">
+            <span class="location-method-label">Coordinates</span>
             <label for="lat">Latitude:</label>
             <input type="text" id="lat">
             <br />
@@ -97,7 +119,10 @@
             <input type="text" id="lng">
             <br />
         </div>
-
+                
+        
+        <button id ="locate">Locate on Map</button>
+        <br  />
         <label>Map diplay error Messages:</label>
         <div id="error_display"> </div>
 
@@ -112,6 +137,7 @@
         </div>
 
     </div>
+    
 
     
 
