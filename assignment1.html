@@ -79,8 +79,24 @@
         <label for="photo">Photo:</label>
         <input type="file" id="photo" accept="image/*">
          <br />
+        <label>Location input method:</label>
+        <br>
+        <input type = "radio" name ="locationmethod" id="locationmethodgeo" value ="geo">
+        <label for ="locationmethodgeo">Use my current location <br/> (browser geolocation)</label>
+        <br/>
+        
+        <input type ="radio" name="locationmethod" id="locationmethodcords" value="coords">
+        <label for="locationmethodcords">Enter Corrdinates manually</label>
         <button id ="locate">Locate on Map</button>
         <br/>
+        <div id="coordInputs">
+            <label for="lat">Latitude:</label>
+            <input type="text" id="lat">
+            <br />
+            <label for="lng">Longitude:</label>
+            <input type="text" id="lng">
+            <br />
+        </div>
 
         <label>Map diplay error Messages:</label>
         <div id="error_display"> </div>
@@ -110,6 +126,7 @@ defer
 
     let landmarks =[];
     let infowindows = [];
+    let userCurrentLocation =null
 
     const defaultLocation = {
             lat : 43.6532
@@ -146,6 +163,8 @@ defer
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             }
+
+            userCurrentLocation=userLocation
 
             map.setCenter(userLocation);
             map.setZoom(12);
@@ -186,16 +205,37 @@ defer
         const description = document.getElementById("Description").value;
         const photo = document.getElementById("photo")
         const error_data = document.getElementById("error_data");
+        const locationmethod = document.querySelector('input[name="locationmethod"]').value;
+
+
 
         if (address === "" || title ==="" || description === "" || photo.files.length ===0){
             error_data.innerHTML = "All data fields are required.";
             return false;
         }
-        else {
-            error_data.innerHTML = "no errors."
-            return true;
+
+        if(locationmethod ==="geo")
+        {
+            if(userCurrentLocation === false)
+        {
+            error_data.innerHTML="Brower location is not available."
+            return false;
+        }
+        }
+        else if(locationmethod ==="coords")
+        {
+            const lat = parseFloat(document.getElementById("lat").value);
+            const lng = parseFloat(document.getElementById("lng").value);
+
+            if(lat===''|| lng==='')
+        {
+            error_data.innerHTML="Latitude and longitude are requried";
+            return false;
+        }
         }
 
+        error_data.innerHTML="no error";
+        return true
     }
 
 
@@ -206,31 +246,42 @@ defer
         const description = document.getElementById("Description").value;
         const photo = document.getElementById("photo")
         const imageURL = URL.createObjectURL(photo.files[0]);
+        const locationmethod = document.querySelector('input[name="locationmethod"]').value;
+        let position=null;
         
-        geocoder.geocode( {'address':address}, function(results,status){
+        if(locationmethod ==="geo"){
+            position = userCurrentLocation;
+        }
+        else if(locationmethod==="coords")
+        {
+            const lat = parseFloat(document.getElementById("lat").value);
+            const lng = parseFloat(document.getElementById("lng").value); 
+            position = {lat:lat,lng:lng};
+        }
 
-            if (status =="OK"){
+            
 
-                    const marker=new google.maps.marker.AdvancedMarkerElement({
-                    map:map,
-                    position:{lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()},
+        const marker=new google.maps.marker.AdvancedMarkerElement({
+            map:map,
+            position:position,
+        });
                     
-                });
+              
 
 
-                const contentString = 
-                    "<h3>" + title + "</h3>" +
-                    "<p>" + description + "</p>" +
-                    "<img src='" + imageURL + "' width = '150' height = '150'/>";
-                const infowindow = new google.maps.InfoWindow({
-                    content: contentString
+        const contentString = 
+            "<h3>" + title + "</h3>" +
+            "<p>" + description + "</p>" +
+            "<img src='" + imageURL + "' width = '150' height = '150'/>";
+            const infowindow = new google.maps.InfoWindow({
+                content: contentString
                 })
 
                 landmarks.push({
                     title: title,
                     address: address,
-                    marker:marker,
-                    position: {lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng()}
+                    marker: marker,
+                    position: position
                 });
 
                 infowindows.push(infowindow);
@@ -249,15 +300,13 @@ defer
                 document.getElementById("Name").value ="";
                 document.getElementById("Description").value ="";
                 document.getElementById("photo").value ="";
+                documnet.getElementById("lat").value="";
+                documnet.getElementById("lng").value="";
                 document.getElementById("error_data").innerHTML ="";
+                
 
 
-
-            }
-            else {
-                document.getElementById("error_display").innerHTML = "Geocode was not successful for the following reason: " + status;
-            }
-        });
+           
 
        
 
