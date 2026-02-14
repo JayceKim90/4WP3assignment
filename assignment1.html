@@ -84,7 +84,7 @@
         <input type = "radio" name ="locationmethod" id="locationmethodgeo" value ="geo">
         <label for ="locationmethodgeo">Use my current location <br/> (browser geolocation)</label>
         <br/>
-        
+
         <input type ="radio" name="locationmethod" id="locationmethodcords" value="coords">
         <label for="locationmethodcords">Enter Corrdinates manually</label>
         <button id ="locate">Locate on Map</button>
@@ -205,7 +205,7 @@ defer
         const description = document.getElementById("Description").value;
         const photo = document.getElementById("photo")
         const error_data = document.getElementById("error_data");
-        const locationmethod = document.querySelector('input[name="locationmethod"]').value;
+        const locationmethod = document.querySelector('input[name="locationmethod"]:checked')?.value;
 
 
 
@@ -246,7 +246,7 @@ defer
         const description = document.getElementById("Description").value;
         const photo = document.getElementById("photo")
         const imageURL = URL.createObjectURL(photo.files[0]);
-        const locationmethod = document.querySelector('input[name="locationmethod"]').value;
+        const locationmethod = document.querySelector('input[name="locationmethod"]:checked')?.value;
         let position=null;
         
         if(locationmethod ==="geo"){
