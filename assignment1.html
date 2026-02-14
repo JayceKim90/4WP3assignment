@@ -285,7 +285,9 @@ defer
             LandmarkDiv.innerHTML = "<h3>" + item.title + "</h3>" +
                                     "<p>" + item.address + "</p>";
                                     
-           
+            LandmarkDiv.addEventListener("click",function(){
+                    cneterandshowlandmark(index);
+                });
             Landmark_items.appendChild(LandmarkDiv);
             
             });
@@ -299,6 +301,15 @@ defer
             geocodeaddress();
         }
     } );
+
+     function cneterandshowlandmark(index)
+    {
+        const landmark = landmarks[index];
+        map.setCenter(landmark.position);
+        map.setZoom(15);
+
+
+    }
 
 
     function highlightlandmark(index)
