@@ -70,6 +70,13 @@
          <br />
          <button id ="locate">Locate on Map</button>
           <br/>
+
+          
+        <label>Map diplay error Messages:</label>
+        <div id="error_display"> </div>
+
+        <label>data input error Messages:</label>
+        <div id="error_data"> </div>
     </div>
     
     
@@ -145,6 +152,29 @@ defer
 
     }
 
+     function ValidateDataType()
+    {
+
+        
+        const address = document.getElementById("address").value;
+        const title = document.getElementById("Name").value;
+        const description = document.getElementById("Description").value;
+        const photo = document.getElementById("photo")
+        const error_data = document.getElementById("error_data");
+
+        if (address === "" || title ==="" || description === "" || photo.files.length ===0){
+            error_data.innerHTML = "All data fields are required.";
+            return false;
+        }
+        else {
+            error_data.innerHTML = "no errors."
+            return true;
+        }
+
+    }
+
+
+
 
      function geocodeaddress()
     {
@@ -200,9 +230,13 @@ defer
     }
 
     
-    const locate_location =document.getElementById("locate");
-    locate_location.addEventListener("click",geocodeaddress);
-    
+     const locate_location =document.getElementById("locate");
+    locate_location.addEventListener("click", function(){
+        if (ValidateDataType()){
+            geocodeaddress();
+        }
+    } );
+
 </script>
 
 </body>
