@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewpoint" content=width-device-width, initial-scale="1.0">
+    <title>Employee Management Application</title>
+</head>
+
+<body>
+<h1>Student Course Planner</h1>
+<table>
+        <tr>
+            <th>Coursecode</th>
+            <th>Course name</th>
+            <th>Credit</th>
+            <th>Availability</th>
+            <th>Format</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+        {{#Courses}}
+        <tr>
+            <td>{{ rowid }}</td>
+            <td>{{ firstname }}</td>
+            <td>{{ lastname }}</td>
+            <td>{{ salary }}</td>
+            <td><a href="/delete/{{ rowid }}">X</a></td>
+            <td><a href="/updateform/{{ rowid }}">X</a></td>
+        </tr>
+        {{/Courses}}
+    </table>
+</body>
