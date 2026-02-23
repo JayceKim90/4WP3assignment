@@ -7,7 +7,7 @@ let db;
 async function makeConnection()
 {
     db = await sqlite.open({
-        filename:"Course.db",
+        filename:"course.db",
         driver:sqlite3.Database
     });
 
@@ -16,7 +16,7 @@ async function makeConnection()
 
 async function getAllCourse()
 {
-    const results = await db.all("SELECT rowid, * FROM Course");
+    const results = await db.all("SELECT rowid, * FROM Courses");
     return results;
 }
 

@@ -20,12 +20,12 @@
         </tr>
         {{#Courses}}
         <tr>
-            <td>{{ rowid }}</td>
-            <td>{{ firstname }}</td>
-            <td>{{ lastname }}</td>
-            <td>{{ salary }}</td>
-            <td><a href="/delete/{{ rowid }}">X</a></td>
-            <td><a href="/updateform/{{ rowid }}">X</a></td>
+            <td>{{ course_code }}</td>
+            <td>{{ course_name }}</td>
+            <td>{{ credit }}</td>
+            <td>{{ availability }}</td>
+            <td>{{ format }}</td>
+            <td>{{ course_type }}</td>
         </tr>
         {{/Courses}}
     </table>
