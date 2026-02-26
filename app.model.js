@@ -15,12 +15,15 @@ async function makeConnection()
 
 
 async function getAllCourse(availability,sortField,orderby)
-{   
+{     
+    const allowed = ["rowid", "course_code","course_name", "course_type"];
+    const Sortallowed = allowed.includes(sortField) ? sortField : "rowid";
+    const Order = orderby === "DESC" ? "DESC" : "ASC";
 
     if(availability ==="1" || availability ==="0"){
-        return db.all(`SELECT rowid as id, *FROM Courses WHERE availability =? ORDER BY ${sortField} ${orderby}`,availability);
+        return db.all(`SELECT rowid as id, *FROM Courses WHERE availability =? ORDER BY ${Sortallowed} ${Order}`,availability);
     }
-    const results = await db.all(`SELECT rowid as id, * FROM Courses ORDER BY ${sortField} ${orderby}`);
+    const results = await db.all(`SELECT rowid as id, * FROM Courses ORDER BY ${Sortallowed} ${Order}`);
     return results;
 }
 async function addCourse(code, name, credit, availability, format, type, desc) {
