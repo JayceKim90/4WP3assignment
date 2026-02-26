@@ -26,4 +26,10 @@ async function addCourse(code, name, credit, availability, format, type, desc) {
     );
 }
 
-module.exports={makeConnection, getAllCourse, addCourse};
+async function deleteCourse(id)
+{
+    await db.run("DELETE FROM Courses WHERE rowid=?",id);
+}
+
+
+module.exports={makeConnection, getAllCourse, addCourse, deleteCourse};

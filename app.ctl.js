@@ -52,6 +52,14 @@ app.post("/addCourse", async function(req,res) {
         }
 });
 
+app.get("/delete/:id", async function(req,res){
+    await Model.deleteCourse(req.params.id);
+    const CourseArray = await Model.getAllCourse();
+    
+    res.render("main_page",{Courses: CourseArray});
+});
+
+
 
 
 async function startServer()
