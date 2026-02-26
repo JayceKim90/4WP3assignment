@@ -59,7 +59,11 @@ app.get("/delete/:id", async function(req,res){
     res.render("main_page",{Courses: CourseArray});
 });
 
+app.get("/detail/:id", async function(req,res){
 
+    const course = await Model.DetailCourse(req.params.id);
+    res.render("main_page", {detailCourse:course});
+});
 
 
 async function startServer()

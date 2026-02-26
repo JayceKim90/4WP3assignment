@@ -49,31 +49,38 @@
         </div>
 {{/showAddForm}}
 
+{{#detailCourse}}
+    <h2>{{course_code}}, {{course_name}}, {{course_type}}</h2>
+    <p>Description: {{description}}</p>
+    <p>Credit : {{credit}} | Format : {{format}} | Availability : {{availability}}
+{{/detailCourse}}
 
 
 
-<table>
-        <tr>
-            <th>Coursecode</th>
-            <th>Course name</th>
-            <th>Credit</th>
-            <th>Availability</th>
-            <th>Format</th>
-            <th>Type</th>
-            <th>Actions</th>
-        </tr>
-        {{#Courses}}
-        <tr>
-            <td>{{ course_code }}</td>
-            <td>{{ course_name }}</td>
-            <td>{{ credit }}</td>
-            <td>{{ availability }}</td>
-            <td>{{ format }}</td>
-            <td>{{ course_type }}</td>
-            <td><a href="/detail/{{ id }}"> D </a><a href="/delete/{{ id }}"> X </a><a href="/updatecourse/{{ id }}"> U</a>
-        </tr>
-        {{/Courses}}
-    </table>
+
+
+    <table>
+            <tr>
+                <th>Coursecode</th>
+                <th>Course name</th>
+                <th>Credit</th>
+                <th>Availability</th>
+                <th>Format</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+            {{#Courses}}
+            <tr>
+                <td>{{ course_code }}</td>
+                <td>{{ course_name }}</td>
+                <td>{{ credit }}</td>
+                <td>{{ availability }}</td>
+                <td>{{ format }}</td>
+                <td>{{ course_type }}</td>
+                <td><a href="/detail/{{ id }}"> D </a><a href="/delete/{{ id }}"> X </a><a href="/updatecourse/{{ id }}"> U</a>
+            </tr>
+            {{/Courses}}
+        </table>
 
 
     

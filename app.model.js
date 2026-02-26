@@ -31,5 +31,10 @@ async function deleteCourse(id)
     await db.run("DELETE FROM Courses WHERE rowid=?",id);
 }
 
+async function DetailCourse(id)
+{
+    return await db.get("SELECT rowid as id, * FROM Courses WHERE rowid=?",id);
+}
 
-module.exports={makeConnection, getAllCourse, addCourse, deleteCourse};
+
+module.exports={makeConnection, getAllCourse, addCourse, deleteCourse,DetailCourse};
