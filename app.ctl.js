@@ -65,6 +65,29 @@ app.get("/detail/:id", async function(req,res){
     res.render("main_page", {detailCourse:course});
 });
 
+app.get("/updatecourseform/:id", async function(req,res){
+
+    const CourseArray = await Model.getAllCourse();
+    res.render("main_page",{formdata: CourseArray.find( (x) => x.rowid == req.params.id),
+                             updatecourse: true});
+});
+
+
+app.post("update/:id", async function(req,res){
+   
+
+   await Model.UpdateCourse(req.params.id,
+                            req.body.code, 
+                            req.body.name, 
+                            parseFloat(req.body.credit),
+                            req.body.availability, 
+                            req.body.format, 
+                            req.body.type, 
+                            req.body.description);
+   
+    
+
+});
 
 async function startServer()
 {

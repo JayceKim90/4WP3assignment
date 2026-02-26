@@ -36,5 +36,11 @@ async function DetailCourse(id)
     return await db.get("SELECT rowid as id, * FROM Courses WHERE rowid=?",id);
 }
 
+async function UpdateCourse(id,code,name,credit,availability,format,type,description)
+{   
 
-module.exports={makeConnection, getAllCourse, addCourse, deleteCourse,DetailCourse};
+    await db.run("UPDATE Courses SET course_code=?, course_name=?, credit=?, availability=?, format=?, course_type=?, description=? WHERE rowid=?",
+        [code, name, credit, availability, format, type, description, id]);
+};
+
+module.exports={makeConnection, getAllCourse, addCourse, deleteCourse,DetailCourse,UpdateCourse};

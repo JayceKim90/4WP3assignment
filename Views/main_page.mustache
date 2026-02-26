@@ -32,7 +32,7 @@
                 <label for= "credit">Enter the credit</label>
                 <input type="text" name="credit">
 
-                <select name="availability">aavailability
+                <select name="availability">availability
                     <option value="1">Available (Yes)</option>
                     <option value="0">Unavailable (No)</option>
                 </select>
@@ -55,8 +55,34 @@
     <p>Credit : {{credit}} | Format : {{format}} | Availability : {{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}
 {{/detailCourse}}
 
+{{#updatecourse}}
 
+ <div class="form-container">
+            <h3>Update Course</h3>
+            <form action="/update/{{formdata.id}}" method="POST">
+                <label for="code">Program Code</label>
+                <input type="text" name="code">
+                <label for = "name">program Name</label>
+                <input type="text" name="name">
+                <label for= "credit">Enter the credit</label>
+                <input type="text" name="credit">
 
+                <select name="availability">availability
+                    <option value="1">Available (Yes)</option>
+                    <option value="0">Unavailable (No)</option>
+                </select>
+                <select name="format">Format
+                    <option value="Online">Online</option>
+                    <option value="In-person">In-person</option>
+                </select>
+                <label for= "type">Enter the course_lv(type)</label>
+                <input type="text" name="type">
+                <label for= "description">Enter the course desciption</label>
+                <input type="text" name="description">
+                <button type="submit">Update Course Course</button>
+            </form>
+        </div>
+{{/updatecourse}}
 
 {{^detailCourse}}
     <table>
@@ -77,7 +103,7 @@
                 <td>{{#availability}} Yes{{/availability}} {{^availability}} No {{/availability}}</td>
                 <td>{{ format }}</td>
                 <td>{{ course_type }}</td>
-                <td><a href="/detail/{{ id }}"> D </a><a href="/delete/{{ id }}"> X </a><a href="/updatecourse/{{ id }}"> U</a>
+                <td><a href="/detail/{{ id }}"> D </a><a href="/delete/{{ id }}"> X </a><a href="/updatecourseform/{{ id }}"> U</a>
             </tr>
             {{/Courses}}
         </table>
