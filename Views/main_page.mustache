@@ -9,6 +9,15 @@
 <body>
 <h1>Student Course Planner</h1>
 
+{{#errors.length}}
+<p>please fix the following errors:</P>
+<ul>
+    {{#errors}}
+    <li>{{.}}</li>
+    {{/errors}}
+</ul>
+{{/errors.length}}
+
 <a href ="/add"> add course</a>
 
 
