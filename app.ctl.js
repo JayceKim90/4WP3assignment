@@ -66,15 +66,16 @@ app.get("/detail/:id", async function(req,res){
 });
 
 app.get("/updatecourseform/:id", async function(req,res){
-
+    const course = await Model.DetailCourse(req.params.id);
+   
     const CourseArray = await Model.getAllCourse();
     res.render("main_page",{formdata: CourseArray.find( (x) => x.id == req.params.id),
-                             updatecourse: true});
+                             updatecourse: course});
 });
 
 
 app.post("/update/:id", async function(req,res){
-   
+    
 
    await Model.UpdateCourse(req.params.id,
                             req.body.code, 

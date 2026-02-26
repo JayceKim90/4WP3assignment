@@ -56,7 +56,9 @@
 {{/detailCourse}}
 
 {{#updatecourse}}
-
+    <h2>{{course_code}}, {{course_name}}, {{course_type}}</h2>
+    <p>Description: {{description}}</p>
+    <p>Credit : {{credit}} | Format : {{format}} | Availability : {{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}
  <div class="form-container">
             <h3>Update Course</h3>
             <form action="/update/{{formdata.id}}" method="POST">
