@@ -18,7 +18,7 @@ app.get("/", async function(req,res){
     console.log(availability);
 
 
-    const CourseArray = await Model.getAllCourse();
+    const CourseArray = await Model.getAllCourse(availability);
     
     res.render("main_page",{Courses: CourseArray});
 

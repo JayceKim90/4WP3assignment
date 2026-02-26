@@ -14,8 +14,12 @@ async function makeConnection()
 }
 
 
-async function getAllCourse()
+async function getAllCourse(availability)
 {
+
+    if(availability ==="1" || availability ==="0"){
+        return db.all("SELECT rowid as id, FROM Courses WHERE availability =?",availability)
+    }
     const results = await db.all("SELECT rowid as id, * FROM Courses");
     return results;
 }
