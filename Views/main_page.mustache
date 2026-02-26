@@ -52,13 +52,13 @@
 {{#detailCourse}}
     <h2>{{course_code}}, {{course_name}}, {{course_type}}</h2>
     <p>Description: {{description}}</p>
-    <p>Credit : {{credit}} | Format : {{format}} | Availability : {{availability}}
+    <p>Credit : {{credit}} | Format : {{format}} | Availability : {{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}
 {{/detailCourse}}
 
 
 
 
-
+{{^detailCourse}}
     <table>
             <tr>
                 <th>Coursecode</th>
@@ -74,14 +74,14 @@
                 <td>{{ course_code }}</td>
                 <td>{{ course_name }}</td>
                 <td>{{ credit }}</td>
-                <td>{{ availability }}</td>
+                <td>{{#availability}} Yes{{/availability}} {{^availability}} No {{/availability}}</td>
                 <td>{{ format }}</td>
                 <td>{{ course_type }}</td>
                 <td><a href="/detail/{{ id }}"> D </a><a href="/delete/{{ id }}"> X </a><a href="/updatecourse/{{ id }}"> U</a>
             </tr>
             {{/Courses}}
         </table>
-
+{{/detailCourse}}
 
     
 </body>
