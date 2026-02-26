@@ -14,6 +14,9 @@ app.use( express.urlencoded({extended:false}))
 
 app.get("/", async function(req,res){
 
+    const availability = req.query.availability;
+    console.log(availability);
+
 
     const CourseArray = await Model.getAllCourse();
     

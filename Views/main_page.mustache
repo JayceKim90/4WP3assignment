@@ -87,6 +87,15 @@
 {{/updatecourse}}
 
 {{^detailCourse}}
+    <form action="/" method ="get">
+        <label>Filter by availablitity: </label>
+        <select name = "availability">
+            <option value = "" >All</option>
+            <option value = "1">Available</option>
+            <option value = "0">Not Available</option>
+        </select> 
+        <button type ="submit">Apply</button>  
+    </form>
     <table>
             <tr>
                 <th>Coursecode</th>
