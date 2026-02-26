@@ -16,9 +16,14 @@ async function makeConnection()
 
 async function getAllCourse()
 {
-    const results = await db.all("SELECT rowid, * FROM Courses");
+    const results = await db.all("SELECT rowid as id, * FROM Courses");
     return results;
 }
+async function addCourse(code, name, credit, availability, format, type, desc) {
+    await db.run(
+        "INSERT INTO Courses VALUES (?,?,?,?,?,?,?)",
+        [code, name, credit, availability, format, type, desc]
+    );
+}
 
-
-module.exports={makeConnection, getAllCourse};
+module.exports={makeConnection, getAllCourse, addCourse};
