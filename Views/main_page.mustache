@@ -93,7 +93,19 @@
             <option value = "" >All</option>
             <option value = "1">Available</option>
             <option value = "0">Not Available</option>
-        </select> 
+        </select>
+        <label>Sort by: </label>
+        <select name = "sort">
+            <option value = "rowid" >N/A</option>
+            <option value = "course_code">Course code</option>
+            <option value = "course_name">Course Name</option>
+            <option value = "course_type">Course Type(level)</option>
+        </select>
+        <label>Order by </label>
+        <select name = "order">
+            <option value = "ASC" >A to Z</option>
+            <option value = "DESC">Z to A</option>
+        </select>  
         <button type ="submit">Apply</button>  
     </form>
     <table>
@@ -103,7 +115,7 @@
                 <th>Credit</th>
                 <th>Availability</th>
                 <th>Format</th>
-                <th>Type</th>
+                <th>Type(level)</th>
                 <th>Actions</th>
             </tr>
             {{#Courses}}

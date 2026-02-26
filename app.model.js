@@ -14,11 +14,11 @@ async function makeConnection()
 }
 
 
-async function getAllCourse(availability)
-{
+async function getAllCourse(availability,sortField,orderby)
+{   
 
     if(availability ==="1" || availability ==="0"){
-        return db.all("SELECT rowid as id, *FROM Courses WHERE availability =?",availability);
+        return db.all(`SELECT rowid as id, *FROM Courses WHERE availability =? ORDER BY ${sortField} ${orderby}`,availability);
     }
     const results = await db.all("SELECT rowid as id, * FROM Courses");
     return results;

@@ -15,10 +15,11 @@ app.use( express.urlencoded({extended:false}))
 app.get("/", async function(req,res){
 
     const availability = req.query.availability;
-    console.log(availability);
+    const sortField = req.query.sort;
+    const orderby = req.query.order;
 
-
-    const CourseArray = await Model.getAllCourse(availability);
+   
+    const CourseArray = await Model.getAllCourse(availability,sortField,orderby);
     
     res.render("main_page",{Courses: CourseArray});
 
