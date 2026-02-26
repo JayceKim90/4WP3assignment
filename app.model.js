@@ -20,7 +20,7 @@ async function getAllCourse(availability,sortField,orderby)
     if(availability ==="1" || availability ==="0"){
         return db.all(`SELECT rowid as id, *FROM Courses WHERE availability =? ORDER BY ${sortField} ${orderby}`,availability);
     }
-    const results = await db.all("SELECT rowid as id, * FROM Courses");
+    const results = await db.all(`SELECT rowid as id, * FROM Courses ORDER BY ${sortField} ${orderby}`);
     return results;
 }
 async function addCourse(code, name, credit, availability, format, type, desc) {
