@@ -87,6 +87,7 @@
 {{/updatecourse}}
 
 {{^detailCourse}}
+{{^updatecourse}}
     <form action="/" method ="get">
         <label>Filter by availablitity: </label>
         <select name = "availability">
@@ -130,6 +131,7 @@
             </tr>
             {{/Courses}}
         </table>
+{{/updatecourse}}
 {{/detailCourse}}
 
     
