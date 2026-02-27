@@ -3,22 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewpoint" content=width-device-width, initial-scale="1.0">
-    <title>Employee Management Application</title>
+    <title>Course Planner</title>
+     
 </head>
 
 <body>
-<h1>Student Course Planner</h1>
+<div class="header">
+    <h1>Student Course Planner</h1>
+</div>
+<a href ="/add">+Add course</a>
+<div class="container">
+    {{#errors.length}}
+    <div class="error-box">
+        <p>please fix the following errors:</P>
+        <ul>
+            {{#errors}}
+            <li>{{.}}</li>
+            {{/errors}}
+        </ul>
+    </div>
+    {{/errors.length}}
 
-{{#errors.length}}
-<p>please fix the following errors:</P>
-<ul>
-    {{#errors}}
-    <li>{{.}}</li>
-    {{/errors}}
-</ul>
-{{/errors.length}}
 
-<a href ="/add"> add course</a>
+
 
 
 {{#showAddForm}}
@@ -31,12 +38,13 @@
                 <input type="text" name="name">
                 <label for= "credit">Enter the credit</label>
                 <input type="text" name="credit">
-
-                <select name="availability">availability
+                <label>Availability</label>
+                <select name="availability">
                     <option value="1">Available (Yes)</option>
                     <option value="0">Unavailable (No)</option>
                 </select>
-                <select name="format">Format
+                <label>Format</label>
+                <select name="format">
                     <option value="Online">Online</option>
                     <option value="In-person">In-person</option>
                 </select>
@@ -50,15 +58,25 @@
 {{/showAddForm}}
 
 {{#detailCourse}}
-    <h2>{{course_code}}, {{course_name}}, {{course_type}}</h2>
-    <p>Description: {{description}}</p>
-    <p>Credit : {{credit}} | Format : {{format}} | Availability : {{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}
+    <div class = "detail-view">
+        <h2>{{course_code}}-{{course_name}}</h2>
+        <p><strong>Type (level):</strong>{{course_type}}</p>
+        <p><strong>Credit:</strong>{{credit}}</p>
+        <p><strong>Format:</strong>{{format}}</p>
+        <p><strong>Availability:</strong>{{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}</p>
+        <p><strong>Description:</strong>{{description}}</p>
+    </div>
 {{/detailCourse}}
 
 {{#updatecourse}}
-    <h2>{{course_code}}, {{course_name}}, {{course_type}}</h2>
-    <p>Description: {{description}}</p>
-    <p>Credit : {{credit}} | Format : {{format}} | Availability : {{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}
+    <div class = "detail-view">
+        <h2>{{course_code}}-{{course_name}}</h2>
+        <p><strong>Type (level):</strong>{{course_type}}</p>
+        <p><strong>Credit:</strong>{{credit}}</p>
+        <p><strong>Format:</strong>{{format}}</p>
+        <p><strong>Availability:</strong>{{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}</p>
+        <p><strong>Description:</strong>{{description}}</p>
+    </div>
  <div class="form-container">
             <h3>Update Course</h3>
             <form action="/update/{{formdata.id}}" method="POST">
@@ -68,12 +86,13 @@
                 <input type="text" name="name">
                 <label for= "credit">Enter the credit</label>
                 <input type="text" name="credit">
-
-                <select name="availability">availability
+                <label>Availability</label>
+                <select name="availability">
                     <option value="1">Available (Yes)</option>
                     <option value="0">Unavailable (No)</option>
                 </select>
-                <select name="format">Format
+                <label>Format</label>
+                <select name="format">
                     <option value="Online">Online</option>
                     <option value="In-person">In-person</option>
                 </select>
@@ -88,7 +107,7 @@
 
 {{^detailCourse}}
 {{^updatecourse}}
-    <form action="/" method ="get">
+    <form class="toolbar" action="/" method ="get">
         <label>Filter by availablitity: </label>
         <select name = "availability">
             <option value = "" >All</option>
