@@ -73,24 +73,45 @@ app.get("/updatecourseform/:id", async function(req,res){
     const course = await Model.DetailCourse(req.params.id);
    
     const CourseArray = await Model.getAllCourse();
+    
     res.render("main_page",{formdata: CourseArray.find( (x) => x.id == req.params.id),
                              updatecourse: course});
 });
 
 
 app.post("/update/:id", async function(req,res){
+    const course = await Model.DetailCourse(req.params.id);
+
+     let errors=[];
+        if(isNaN(parseFloat(req.body.credit))|| (parseFloat(req.body.credit))<0.5 || parseFloat(req.body.credit)>6.0)
+        {
+            errors.push("Validation Error: Credit must be a number between 0.5 and 6.0.");
+        }
+        if (!req.body.code|| (typeof req.body.code !== "string")|| req.body.code.length>10)
+        {
+            errors.push("Validation Error: Course Code must be text and under 10 characters.");
+        }
+        if(errors.length>0){
+            const CourseArray = await Model.getAllCourse();
+    
+            res.render("main_page",{Courses: CourseArray,
+                                    formdata: CourseArray.find( (x) => x.id == req.params.id), 
+                                    updatecourse: course,
+                                    errors:errors });
     
 
-   await Model.UpdateCourse(req.params.id,
-                            req.body.code, 
-                            req.body.name, 
-                            parseFloat(req.body.credit),
-                            req.body.availability, 
-                            req.body.format, 
-                            req.body.type, 
-                            req.body.description);
-   
-     res.redirect("/");
+        }else{
+            await Model.UpdateCourse(req.params.id,
+                                        req.body.code, 
+                                        req.body.name, 
+                                        parseFloat(req.body.credit),
+                                        req.body.availability, 
+                                        req.body.format, 
+                                        req.body.type, 
+                                        req.body.description);
+            
+                res.redirect("/");
+            }
 
 });
 
