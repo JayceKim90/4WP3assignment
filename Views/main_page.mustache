@@ -140,7 +140,61 @@
         color: black;
     }
 
+    .form-container {
+        background-color:white;
+        border: 1px solid lightgrey;
+        border-radius:6px;
+        padding: 22px;
+        box-shadow: 0 1px 6px black;
+        max-width: 600px;
+        margin-bottom: 22px;
+    }
+    .form-container h3 {
+        color:#7a003c;
+        font-size:1.05rem;
+        border-bottom: 2px solid #7a003c;
+        padding-bottom: 8px;
+        margin-bottom: 18px;
+    }   
+    .form-grid{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-bottom: 14px;
+    }
+    .form-group{
+        display:flex;
+        flex-direction:column;
+        gap:4px;
 
+    }
+    .form-group label{
+        font-size:0.83rem;
+        font-weight:bold;
+        color:grey;
+    }
+
+    .form-group select{
+        padding: 7px 10px;
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        font-size: 0.88rem;
+        font-family: Arial;
+        width:100%
+    }
+
+    .form-container button[type="submit"]{
+        margin-top:16px;
+        background-color:#7a003c;
+        color:white;
+        border:none;
+        padding: 9px 20px;
+        border-radius: 4px;
+        cursor:pointer;
+        font-size:0.88rem;
+        font-weight:bold;
+    }
+    
     </style>
 </head>
 
@@ -175,32 +229,56 @@
 
 
 {{#showAddForm}}
-        <div class="form-container">
-            <h3>Register New Course</h3>
-            <form action="/addCourse" method="POST">
+    <div class="form-container">
+        <h3>Register New Course</h3>
+        <form action="/addCourse" method="POST">
+        <div class="form-grid">
+            <div class="form-group">
                 <label for="code">Program Code</label>
                 <input type="text" name="code">
-                <label for = "name">program Name</label>
+            </div>
+            <div class="form-group">
+                <label for = "name">Program Name</label>
                 <input type="text" name="name">
+            </div>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
                 <label for= "credit">Enter the credit</label>
                 <input type="text" name="credit">
+            </div>
+            <div class="form-group">
                 <label>Availability</label>
                 <select name="availability">
                     <option value="1">Available (Yes)</option>
                     <option value="0">Unavailable (No)</option>
                 </select>
+            </div>
+        </div>
+        <div class="form-gird">
+            <div class="form-group">
                 <label>Format</label>
                 <select name="format">
                     <option value="Online">Online</option>
                     <option value="In-person">In-person</option>
                 </select>
+            </div>
+            <div class="form-group">
                 <label for= "type">Enter the course_lv(type)</label>
                 <input type="text" name="type">
-                <label for= "description">Enter the course desciption</label>
-                <input type="text" name="description">
-                <button type="submit">Save Course</button>
-            </form>
+            </div>
         </div>
+
+        <div clss="form-grid form-full">
+            <div class="form-group">
+                <label for= "description">Description</label>
+                <input type="text" name="description">
+            </div>
+        </div>
+
+            <button type="submit">Save Course</button>
+            </form>
+    </div>
 {{/showAddForm}}
 
 {{#detailCourse}}
@@ -223,32 +301,56 @@
         <p><strong>Availability:</strong>{{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}</p>
         <p><strong>Description:</strong>{{description}}</p>
     </div>
- <div class="form-container">
-            <h3>Update Course</h3>
-            <form action="/update/{{formdata.id}}" method="POST">
+    <div class="form-container">
+        <h3>Update selected Course</h3>
+        <form action="/addCourse" method="POST">
+        <div class="form-grid">
+            <div class="form-group">
                 <label for="code">Program Code</label>
                 <input type="text" name="code">
-                <label for = "name">program Name</label>
+            </div>
+            <div class="form-group">
+                <label for = "name">Program Name</label>
                 <input type="text" name="name">
+            </div>
+        </div>
+        <div class="form-grid">
+            <div class="form-group">
                 <label for= "credit">Enter the credit</label>
                 <input type="text" name="credit">
+            </div>
+            <div class="form-group">
                 <label>Availability</label>
                 <select name="availability">
                     <option value="1">Available (Yes)</option>
                     <option value="0">Unavailable (No)</option>
                 </select>
+            </div>
+        </div>
+        <div class="form-gird">
+            <div class="form-group">
                 <label>Format</label>
                 <select name="format">
                     <option value="Online">Online</option>
                     <option value="In-person">In-person</option>
                 </select>
+            </div>
+            <div class="form-group">
                 <label for= "type">Enter the course_lv(type)</label>
                 <input type="text" name="type">
-                <label for= "description">Enter the course desciption</label>
-                <input type="text" name="description">
-                <button type="submit">Update Course Course</button>
-            </form>
+            </div>
         </div>
+
+        <div clss="form-grid form-full">
+            <div class="form-group">
+                <label for= "description">Description</label>
+                <input type="text" name="description">
+            </div>
+        </div>
+
+            <button type="submit">Update Course</button>
+            </form>
+    </div>
 {{/updatecourse}}
 
 {{^detailCourse}}
