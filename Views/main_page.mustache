@@ -6,6 +6,7 @@
     <title>Course Planner</title>
      
     <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body{
         font-family : Arial;
@@ -45,6 +46,80 @@
         font-size:0.9rem;
     }
 
+    .mob-header {
+        display: none;
+        background-color: black;
+        height: 52px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 16px;
+        
+        top: 0;
+        z-index: 200;
+    }
+
+    .mob-header-title {
+        color: orange;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+        
+    .hamburger {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 4px;
+    }
+
+    .hamburger span {
+        display: block;
+        width: 24px;
+        height: 3px;
+        background-color: white;
+        border-radius: 2px;
+        transition: all 0.3s;
+        
+    }
+    .mob-dropdown{
+        display:none;
+        position: fixed;
+        top: 52px;
+        left:0;
+        right:0;
+        background-color:black;
+        z-index: 199;
+        flex-direction: column;
+        border-top:1px solid grey;
+    }
+    .mob-dropdown.open{
+        display:flex;
+    }
+    .mob-dropdown a{
+        color:white;
+        padding:14px 20px;
+        font-size: 0.95rem;
+        border-bottom: 1px solid grey;
+    }
+    .mob-dropdown a:hover,.mob-dropdown a.active{
+        background-color:#7a003c;
+        color:white;
+    }
+
+    .error-box{
+        background-color:white;
+        border-left: 4px solid red;
+        color:red;
+        padding:12px 16px;
+        margin-bottom: 16px;
+        border-radius:4px;
+    }
+    .error-box ul{
+        margin: 6px 0 0 16px;
+    }
     .toolbar{
         background-color: white;
         border: 1px solid white;
@@ -195,6 +270,41 @@
         font-weight:bold;
     }
     
+
+    @media(max-width:768px){
+        body{
+            display:block;
+        }
+        .sidebar{
+            display:none;
+        }
+        .mob-header{
+            display:flex;
+        }
+        .page-title{
+            font-size:1.05rem;
+            margin-bottom:12px;
+        }
+        .form-grid{
+            grid-template-columns:1fr;
+
+        }
+        .main{
+            padding:14px;
+        }
+        .form-container{
+            max-width:100%;
+        }
+        .detail-view{
+            max-width:100%;
+        }
+        .toolbar{
+            flex-direction:column;
+            align-items:flex-start;
+        }
+    }
+
+
     </style>
 </head>
 
@@ -207,7 +317,19 @@
     </nav>
 </aside>
 
+<header class="mob-header">
+    <span class="mob-header-title">Course Planner</span>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
 
+<div class="mob-dropdown" id="mobDropdown">
+    <a href = "/">Dashbord</a>
+    <a href ="/add">+Add course</a>
+</div>
 
 
 
@@ -303,7 +425,7 @@
     </div>
     <div class="form-container">
         <h3>Update selected Course</h3>
-        <form action="/addCourse" method="POST">
+        <form action="/update/{{formdata.id}}" method="POST">
         <div class="form-grid">
             <div class="form-group">
                 <label for="code">Program Code</label>
@@ -394,7 +516,7 @@
                 <td>{{#availability}} Yes{{/availability}} {{^availability}} No {{/availability}}</td>
                 <td>{{ format }}</td>
                 <td>{{ course_type }}</td>
-                <td><a href="/detail/{{ id }}"> D </a><a href="/delete/{{ id }}"> X </a><a href="/updatecourseform/{{ id }}"> U</a>
+                <td><a href="/detail/{{ id }}"> &#128270 </a><a href="/delete/{{ id }}"> &#10060 </a><a href="/updatecourseform/{{ id }}"> ✏️</a>
             </tr>
             {{/Courses}}
         </table>
@@ -402,4 +524,17 @@
 {{/detailCourse}}
 
 </div>
+
+<script>
+    const hamburger = document.getElementById('hamburger');
+    const mobDropdown = document.getElementById('mobDropdown');
+
+    hamburger.addEventListener('click', function(){
+       hamburger.classList.toggle('open');
+       mobDropdown.classList.toggle('open');
+    });
+
+     
+</script>
 </body>
+</html>
