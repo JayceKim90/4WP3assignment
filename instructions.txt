@@ -1,0 +1,15 @@
+To run the Student Course Planner application:
+
+Option A - One command (DB init + server together):
+   npm run dev
+
+Option B - Step by step:
+1. (First time only) Initialize the database with sample courses:
+   npm run init-db
+   or: node dbinit.js
+
+2. Start the application:
+   npm start
+   or: node server.js
+
+3. Open a browser and go to: http://localhost:3000

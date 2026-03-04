@@ -2,539 +2,225 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewpoint" content=width-device-width, initial-scale="1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Course Planner</title>
-     
     <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body{
-        font-family : Arial;
-        background-color : white;
-        display:flex;
-        min-height:100vh;
+    body { font-family: Arial; background-color: white; display: flex; min-height: 100vh; }
+    .sidebar { width: 200px; background-color: black; color: white; flex-shrink: 0; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+    .sidebar-title { background-color: #7a003c; color: white; padding: 18px 16px; font-size: 1rem; font-weight: bold; line-height: 1.3; }
+    .sidebar nav { padding: 12px 0; flex: 1; }
+    .sidebar nav a { display: block; padding: 12px 18px; color: white; font-size: 0.9rem; text-decoration: none; }
+    .sidebar nav a:hover { background-color: #7a003c; color: white; }
+    .mob-header { display: none; background-color: black; height: 52px; align-items: center; justify-content: space-between; padding: 0 16px; top: 0; z-index: 200; }
+    .mob-header-title { color: orange; font-weight: bold; font-size: 1rem; }
+    .hamburger { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 5px; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 3px; background-color: white; border-radius: 2px; transition: all 0.3s; }
+    .mob-dropdown { display: none; position: fixed; top: 52px; left: 0; right: 0; background-color: black; z-index: 199; flex-direction: column; border-top: 1px solid grey; }
+    .mob-dropdown.open { display: flex; }
+    .mob-dropdown a { color: white; padding: 14px 20px; font-size: 0.95rem; border-bottom: 1px solid grey; }
+    .mob-dropdown a:hover, .mob-dropdown a.active { background-color: #7a003c; color: white; }
+    .error-box { background-color: white; border-left: 4px solid red; color: red; padding: 12px 16px; margin-bottom: 16px; border-radius: 4px; }
+    .error-box ul { margin: 6px 0 0 16px; }
+    .toolbar { background-color: white; border: 1px solid white; border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .toolbar label { font-size: 0.83rem; font-weight: bold; color: grey; }
+    .toolbar select { padding: 6px 10px; border: 1px solid lightgrey; border-radius: 4px; font-size: 0.83rem; }
+    .toolbar button { background-color: #7a003c; color: white; border: none; padding: 7px 14px; border-radius: 4px; cursor: pointer; font-size: 0.83rem; }
+    table { width: 100%; border-collapse: collapse; background-color: white; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 6px black; }
+    table th { background-color: #7a003c; color: white; padding: 11px 13px; text-align: center; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    table td { padding: 10px 13px; border-bottom: 1px solid white; font-size: 0.88rem; color: grey; text-align: center; }
+    .main { flex: 1; padding: 24px 28px; min-width: 0; }
+    .page-title { font-size: 1.6rem; color: #7a003c; font-weight: bold; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #7a003c; }
+    .detail-view { background-color: white; border: 1px solid lightgrey; border-radius: 6px; padding: 20px 22px; box-shadow: 0 1px 6px black; max-width: 600px; margin-bottom: 20px; }
+    .detail-view h2 { color: #7a003c; margin-bottom: 12px; font-size: 1.1rem; }
+    .detail-view p { margin: 5px 0; font-size: 0.88rem; color: black; }
+    .form-container { background-color: white; border: 1px solid lightgrey; border-radius: 6px; padding: 22px; box-shadow: 0 1px 6px black; max-width: 600px; margin-bottom: 22px; }
+    .form-container h3 { color: #7a003c; font-size: 1.05rem; border-bottom: 2px solid #7a003c; padding-bottom: 8px; margin-bottom: 18px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-size: 0.83rem; font-weight: bold; color: grey; }
+    .form-group select { padding: 7px 10px; border: 1px solid lightgrey; border-radius: 4px; font-size: 0.88rem; font-family: Arial; width: 100%; }
+    .form-container button[type="submit"] { margin-top: 16px; background-color: #7a003c; color: white; border: none; padding: 9px 20px; border-radius: 4px; cursor: pointer; font-size: 0.88rem; font-weight: bold; }
+    @media (max-width: 768px) {
+        body { display: block; }
+        .sidebar { display: none; }
+        .mob-header { display: flex; }
+        .page-title { font-size: 1.05rem; margin-bottom: 12px; }
+        .form-grid { grid-template-columns: 1fr; }
+        .main { padding: 14px; }
+        .form-container, .detail-view { max-width: 100%; }
+        .toolbar { flex-direction: column; align-items: flex-start; }
     }
-
-    .sidebar{
-        width : 200px;
-        background-color :black;
-        color : white;
-        flex-direction: column;
-        flex-shrink: 0;
-        position: sticky;
-        top: 0;
-        height:100vh;
-    }
-    .sidebar-title {
-        background-color: #7a003c;
-        color: white;
-        padding: 18px 16px;
-        font-size: 1rem;
-        font-weight: bold;
-        line-height: 1.3;
-    }
-
-    .sidebar nav {
-        padding: 12px 0;
-        flex : 1;
-    }
-
-    .sidebar nav a {
-        display:block;
-        padding: 12px 18px;
-        color: white;
-        font-size:0.9rem;
-    }
-
-    .mob-header {
-        display: none;
-        background-color: black;
-        height: 52px;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 16px;
-        
-        top: 0;
-        z-index: 200;
-    }
-
-    .mob-header-title {
-        color: orange;
-        font-weight: bold;
-        font-size: 1rem;
-    }
-
-        
-    .hamburger {
-        background: none;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        padding: 4px;
-    }
-
-    .hamburger span {
-        display: block;
-        width: 24px;
-        height: 3px;
-        background-color: white;
-        border-radius: 2px;
-        transition: all 0.3s;
-        
-    }
-    .mob-dropdown{
-        display:none;
-        position: fixed;
-        top: 52px;
-        left:0;
-        right:0;
-        background-color:black;
-        z-index: 199;
-        flex-direction: column;
-        border-top:1px solid grey;
-    }
-    .mob-dropdown.open{
-        display:flex;
-    }
-    .mob-dropdown a{
-        color:white;
-        padding:14px 20px;
-        font-size: 0.95rem;
-        border-bottom: 1px solid grey;
-    }
-    .mob-dropdown a:hover,.mob-dropdown a.active{
-        background-color:#7a003c;
-        color:white;
-    }
-
-    .error-box{
-        background-color:white;
-        border-left: 4px solid red;
-        color:red;
-        padding:12px 16px;
-        margin-bottom: 16px;
-        border-radius:4px;
-    }
-    .error-box ul{
-        margin: 6px 0 0 16px;
-    }
-    .toolbar{
-        background-color: white;
-        border: 1px solid white;
-        border-radius: 6px;
-        padding: 12px 16px;
-        margin-bottom: 20px;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 10px;
-    }
-    .toolbar label{
-        font-size:0.83rem;
-        font-weight: bold;
-        color: grey;
-    }
-    .toolbar select{
-        padding: 6px 10px;
-        border: 1px solid lightgrey;
-        border-radius:4px;
-        font-size: 0.83rem;
-    }
-    .toolbar button{
-        background-color:#7a003c;
-        color:white;
-        border:none;
-        padding:7px 14px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size:0.83rem;
-
-    }
-
-    table{
-        width: 100%;
-        border-collapse: collapse;
-        background-color: white;
-        border-radius: 6px;
-        overflow: hidden;
-        box-shadow: 0 1px 6px black;
-    }
-
-    table th{
-        background-color: #7a003c;
-        color: white;
-        padding: 11px 13px;
-        text-align: left;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-        text-align: center
-    }
-
-    table td {
-        padding: 10px 13px;
-        border-bottom: 1px solid white;
-        font-size: 0.88rem;
-        color: grey;
-        text-align: center
-    }
-
-    .main{
-        flex:1;
-        padding:24px 28px;
-        min-width:0;
-    }
-    .page-title {
-        font-size: 1.6rem;
-        color: #7a003c;
-        font-weight: bold;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 3px solid #7a003c;
-    }
-    .detail-view{
-        background-color:white;
-        border: 1px solid lightgrey;
-        border-radius: 6px;
-        padding: 20px 22px;
-        box-shadow: 0 1px 6px black;
-        max-width:600px;
-        margin-bottom:20px;
-    }
-    .detail-view h2 {
-        color: #7a003c;
-        margin-bottom: 12px;
-        font-size: 1.1rem;
-    }
-
-    .detail-view p {
-        margin: 5px 0;
-        font-size: 0.88rem;
-        color: black;
-    }
-
-    .form-container {
-        background-color:white;
-        border: 1px solid lightgrey;
-        border-radius:6px;
-        padding: 22px;
-        box-shadow: 0 1px 6px black;
-        max-width: 600px;
-        margin-bottom: 22px;
-    }
-    .form-container h3 {
-        color:#7a003c;
-        font-size:1.05rem;
-        border-bottom: 2px solid #7a003c;
-        padding-bottom: 8px;
-        margin-bottom: 18px;
-    }   
-    .form-grid{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-bottom: 14px;
-    }
-    .form-group{
-        display:flex;
-        flex-direction:column;
-        gap:4px;
-
-    }
-    .form-group label{
-        font-size:0.83rem;
-        font-weight:bold;
-        color:grey;
-    }
-
-    .form-group select{
-        padding: 7px 10px;
-        border: 1px solid lightgrey;
-        border-radius: 4px;
-        font-size: 0.88rem;
-        font-family: Arial;
-        width:100%
-    }
-
-    .form-container button[type="submit"]{
-        margin-top:16px;
-        background-color:#7a003c;
-        color:white;
-        border:none;
-        padding: 9px 20px;
-        border-radius: 4px;
-        cursor:pointer;
-        font-size:0.88rem;
-        font-weight:bold;
-    }
-    
-
-    @media(max-width:768px){
-        body{
-            display:block;
-        }
-        .sidebar{
-            display:none;
-        }
-        .mob-header{
-            display:flex;
-        }
-        .page-title{
-            font-size:1.05rem;
-            margin-bottom:12px;
-        }
-        .form-grid{
-            grid-template-columns:1fr;
-
-        }
-        .main{
-            padding:14px;
-        }
-        .form-container{
-            max-width:100%;
-        }
-        .detail-view{
-            max-width:100%;
-        }
-        .toolbar{
-            flex-direction:column;
-            align-items:flex-start;
-        }
-    }
-
-
     </style>
 </head>
-
 <body>
 <aside class="sidebar">
-    <div class = "sidebar-title">Student<br>Course Planner</div>
+    <div class="sidebar-title"><img src="/logo.svg" alt="Course Planner" width="80" height="80" style="display:block;margin:0 auto 8px;">Student<br>Course Planner</div>
     <nav>
-        <a href = "/">Dashbord</a>
-        <a href ="/add">+Add course</a>
+        <a href="/">Dashboard</a>
+        <a href="/add">+Add course</a>
+        <a href="/api-docs">API List</a>
     </nav>
 </aside>
-
 <header class="mob-header">
     <span class="mob-header-title">Course Planner</span>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </header>
-
 <div class="mob-dropdown" id="mobDropdown">
-    <a href = "/">Dashbord</a>
-    <a href ="/add">+Add course</a>
+    <a href="/">Dashboard</a>
+    <a href="/add">+Add course</a>
+    <a href="/api-docs">API List</a>
 </div>
-
-
-
 <div class="main">
-   <h1 class="page-title">Student Course Planner</h1>
-    {{#errors.length}}
+    <h1 class="page-title">Student Course Planner</h1>
+    {{#hasErrors}}
     <div class="error-box">
-        <p>please fix the following errors:</P>
-        <ul>
-            {{#errors}}
-            <li>{{.}}</li>
-            {{/errors}}
-        </ul>
+        <p>Please fix the following errors:</p>
+        <ul>{{#errors}}<li>{{.}}</li>{{/errors}}</ul>
     </div>
-    {{/errors.length}}
-
-
-
-
+    {{/hasErrors}}
 
 {{#showAddForm}}
     <div class="form-container">
         <h3>Register New Course</h3>
         <form action="/addCourse" method="POST">
         <div class="form-grid">
-            <div class="form-group">
-                <label for="code">Program Code</label>
-                <input type="text" name="code">
-            </div>
-            <div class="form-group">
-                <label for = "name">Program Name</label>
-                <input type="text" name="name">
+            <div class="form-group"><label for="code">Program Code</label><input type="text" name="code" value="{{formdata.code}}"></div>
+            <div class="form-group"><label for="name">Program Name</label><input type="text" name="name" value="{{formdata.name}}"></div>
+        </div>
+        <div class="form-grid">
+            <div class="form-group"><label for="credit">Enter the credit</label><input type="text" name="credit" value="{{formdata.credit}}"></div>
+            <div class="form-group"><label>Availability</label>
+                <select name="availability">
+                    <option value="1" {{#formdata.availabilityYes}}selected{{/formdata.availabilityYes}}>Available (Yes)</option>
+                    <option value="0" {{#formdata.availabilityNo}}selected{{/formdata.availabilityNo}}>Unavailable (No)</option>
+                </select>
             </div>
         </div>
         <div class="form-grid">
-            <div class="form-group">
-                <label for= "credit">Enter the credit</label>
-                <input type="text" name="credit">
-            </div>
-            <div class="form-group">
-                <label>Availability</label>
-                <select name="availability">
-                    <option value="1">Available (Yes)</option>
-                    <option value="0">Unavailable (No)</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-gird">
-            <div class="form-group">
-                <label>Format</label>
+            <div class="form-group"><label>Format</label>
                 <select name="format">
-                    <option value="Online">Online</option>
-                    <option value="In-person">In-person</option>
+                    <option value="Online" {{#formdata.formatOnline}}selected{{/formdata.formatOnline}}>Online</option>
+                    <option value="In-person" {{#formdata.formatInPerson}}selected{{/formdata.formatInPerson}}>In-person</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for= "type">Enter the course_lv(type)</label>
-                <input type="text" name="type">
-            </div>
+            <div class="form-group"><label for="type">Enter the course_lv(type)</label><input type="text" name="type" value="{{formdata.type}}"></div>
         </div>
-
-        <div clss="form-grid form-full">
-            <div class="form-group">
-                <label for= "description">Description</label>
-                <input type="text" name="description">
-            </div>
+        <div class="form-grid form-full">
+            <div class="form-group"><label for="description">Description</label><input type="text" name="description" value="{{formdata.description}}"></div>
         </div>
-
-            <button type="submit">Save Course</button>
-            </form>
+        <button type="submit">Save Course</button>
+        </form>
     </div>
 {{/showAddForm}}
 
 {{#detailCourse}}
-    <div class = "detail-view">
+    <div class="detail-view">
         <h2>{{course_code}}-{{course_name}}</h2>
-        <p><strong>Type (level):</strong>{{course_type}}</p>
-        <p><strong>Credit:</strong>{{credit}}</p>
-        <p><strong>Format:</strong>{{format}}</p>
-        <p><strong>Availability:</strong>{{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}</p>
-        <p><strong>Description:</strong>{{description}}</p>
+        <p><strong>Type (level):</strong> {{course_type}}</p>
+        <p><strong>Credit:</strong> {{credit}}</p>
+        <p><strong>Format:</strong> {{format}}</p>
+        <p><strong>Availability:</strong> {{#availability}}Yes{{/availability}}{{^availability}}No{{/availability}}</p>
+        <p><strong>Description:</strong> {{description}}</p>
     </div>
 {{/detailCourse}}
 
 {{#updatecourse}}
-    <div class = "detail-view">
+    <div class="detail-view">
         <h2>{{course_code}}-{{course_name}}</h2>
-        <p><strong>Type (level):</strong>{{course_type}}</p>
-        <p><strong>Credit:</strong>{{credit}}</p>
-        <p><strong>Format:</strong>{{format}}</p>
-        <p><strong>Availability:</strong>{{#availability}}Yes{{/availability}} {{^availability}}No {{/availability}}</p>
-        <p><strong>Description:</strong>{{description}}</p>
+        <p><strong>Type (level):</strong> {{course_type}}</p>
+        <p><strong>Credit:</strong> {{credit}}</p>
+        <p><strong>Format:</strong> {{format}}</p>
+        <p><strong>Availability:</strong> {{#availability}}Yes{{/availability}}{{^availability}}No{{/availability}}</p>
+        <p><strong>Description:</strong> {{description}}</p>
     </div>
     <div class="form-container">
         <h3>Update selected Course</h3>
         <form action="/update/{{formdata.id}}" method="POST">
         <div class="form-grid">
-            <div class="form-group">
-                <label for="code">Program Code</label>
-                <input type="text" name="code">
-            </div>
-            <div class="form-group">
-                <label for = "name">Program Name</label>
-                <input type="text" name="name">
+            <div class="form-group"><label for="code">Program Code</label><input type="text" name="code" value="{{formdata.course_code}}"></div>
+            <div class="form-group"><label for="name">Program Name</label><input type="text" name="name" value="{{formdata.course_name}}"></div>
+        </div>
+        <div class="form-grid">
+            <div class="form-group"><label for="credit">Enter the credit</label><input type="text" name="credit" value="{{formdata.credit}}"></div>
+            <div class="form-group"><label>Availability</label>
+                <select name="availability">
+                    <option value="1" {{#formdata.availabilityYes}}selected{{/formdata.availabilityYes}}>Available (Yes)</option>
+                    <option value="0" {{#formdata.availabilityNo}}selected{{/formdata.availabilityNo}}>Unavailable (No)</option>
+                </select>
             </div>
         </div>
         <div class="form-grid">
-            <div class="form-group">
-                <label for= "credit">Enter the credit</label>
-                <input type="text" name="credit">
-            </div>
-            <div class="form-group">
-                <label>Availability</label>
-                <select name="availability">
-                    <option value="1">Available (Yes)</option>
-                    <option value="0">Unavailable (No)</option>
-                </select>
-            </div>
-        </div>
-        <div class="form-gird">
-            <div class="form-group">
-                <label>Format</label>
+            <div class="form-group"><label>Format</label>
                 <select name="format">
-                    <option value="Online">Online</option>
-                    <option value="In-person">In-person</option>
+                    <option value="Online" {{#formdata.formatOnline}}selected{{/formdata.formatOnline}}>Online</option>
+                    <option value="In-person" {{#formdata.formatInPerson}}selected{{/formdata.formatInPerson}}>In-person</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label for= "type">Enter the course_lv(type)</label>
-                <input type="text" name="type">
-            </div>
+            <div class="form-group"><label for="type">Enter the course_lv(type)</label><input type="text" name="type" value="{{formdata.course_type}}"></div>
         </div>
-
-        <div clss="form-grid form-full">
-            <div class="form-group">
-                <label for= "description">Description</label>
-                <input type="text" name="description">
-            </div>
+        <div class="form-grid form-full">
+            <div class="form-group"><label for="description">Description</label><input type="text" name="description" value="{{formdata.description}}"></div>
         </div>
-
-            <button type="submit">Update Course</button>
-            </form>
+        <button type="submit">Update Course</button>
+        </form>
     </div>
 {{/updatecourse}}
 
-{{^detailCourse}}
-{{^updatecourse}}
-    <form class="toolbar" action="/" method ="get">
-        <label>Filter by availablitity: </label>
-        <select name = "availability">
-            <option value = "" >All</option>
-            <option value = "1">Available</option>
-            <option value = "0">Not Available</option>
+{{^detailCourse}}{{^updatecourse}}
+    <form class="toolbar" action="/" method="get">
+        <label>Filter by availability:</label>
+        <select name="availability">
+            <option value="">All</option>
+            <option value="1">Available</option>
+            <option value="0">Not Available</option>
         </select>
-        <label>Sort by: </label>
-        <select name = "sort">
-            <option value = "rowid" >N/A</option>
-            <option value = "course_code">Course code</option>
-            <option value = "course_name">Course Name</option>
-            <option value = "course_type">Course Type(level)</option>
+        <label>Sort by:</label>
+        <select name="sort">
+            <option value="rowid">N/A</option>
+            <option value="course_code">Course code</option>
+            <option value="course_name">Course Name</option>
+            <option value="course_type">Course Type(level)</option>
         </select>
-        <label>Order by </label>
-        <select name = "order">
-            <option value = "ASC" >A to Z</option>
-            <option value = "DESC">Z to A</option>
-        </select>  
-        <button type ="submit">Apply</button>  
+        <label>Order by</label>
+        <select name="order">
+            <option value="ASC">A to Z</option>
+            <option value="DESC">Z to A</option>
+        </select>
+        <button type="submit">Apply</button>
     </form>
     <table>
-            <tr>
-                <th>Coursecode</th>
-                <th>Course name</th>
-                <th>Credit</th>
-                <th>Availability</th>
-                <th>Format</th>
-                <th>Type(level)</th>
-                <th>Actions</th>
-            </tr>
-            {{#Courses}}
-            <tr>
-                <td>{{ course_code }}</td>
-                <td>{{ course_name }}</td>
-                <td>{{ credit }}</td>
-                <td>{{#availability}} Yes{{/availability}} {{^availability}} No {{/availability}}</td>
-                <td>{{ format }}</td>
-                <td>{{ course_type }}</td>
-                <td><a href="/detail/{{ id }}"> &#128270 </a><a href="/delete/{{ id }}"> &#10060 </a><a href="/updatecourseform/{{ id }}"> ✏️</a>
-            </tr>
-            {{/Courses}}
-        </table>
-{{/updatecourse}}
-{{/detailCourse}}
-
+        <tr>
+            <th>Coursecode</th>
+            <th>Course name</th>
+            <th>Credit</th>
+            <th>Availability</th>
+            <th>Format</th>
+            <th>Type(level)</th>
+            <th>Actions</th>
+        </tr>
+        {{#Courses}}
+        <tr>
+            <td>{{course_code}}</td>
+            <td>{{course_name}}</td>
+            <td>{{credit}}</td>
+            <td>{{#availability}}Yes{{/availability}}{{^availability}}No{{/availability}}</td>
+            <td>{{format}}</td>
+            <td>{{course_type}}</td>
+            <td><a href="/detail/{{id}}">&#128270</a> <a href="/delete/{{id}}">&#10060</a> <a href="/updatecourseform/{{id}}">&#9998;</a></td>
+        </tr>
+        {{/Courses}}
+    </table>
+{{/updatecourse}}{{/detailCourse}}
 </div>
-
 <script>
-    const hamburger = document.getElementById('hamburger');
-    const mobDropdown = document.getElementById('mobDropdown');
-
-    hamburger.addEventListener('click', function(){
-       hamburger.classList.toggle('open');
-       mobDropdown.classList.toggle('open');
-    });
-
-     
+document.getElementById('hamburger').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.getElementById('mobDropdown').classList.toggle('open');
+});
 </script>
 </body>
 </html>
