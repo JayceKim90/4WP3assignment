@@ -11,6 +11,9 @@ app.set("views",__dirname+ "/views");
 
 app.use( express.urlencoded({extended:false}))
 
+// serve static files from public folder so images, css, etc. are accessible
+app.use(express.static(__dirname + "/public"));
+
 
 app.get("/", async function(req,res){
 
